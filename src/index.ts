@@ -5,6 +5,8 @@ export var WechatID: string = '';
 export var Server: string = 'http://api.tansuyun.cn/';
 export var UUID = '';
 export const IsWechatBrower = isWeixinBrowser();
+export var jsConfiged = false;
+export var UserInfo: any = false;
 const request = axios.create({
     withCredentials: true,
 })
@@ -92,9 +94,15 @@ export async function jsConfig() {
         throw new Error('NOT_WECHAT_BROWER');
     }
     let config = await post('jsConfig', { URL: window.location.href })
-    if (config) {
-        wx.config(config)
+    if (config.d) {
+        wx.config(config.d)
+        jsConfiged = true;
     }
+}
+if (IsWechatBrower) {
+    wx.ready(() => {
+        jsConfig()
+    })
 }
 export function location(s: Function, e: Function) {
     if (!IsWechatBrower) {
