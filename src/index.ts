@@ -53,14 +53,11 @@ export const defaultApis = Object.keys(Api)
 async function post(What: string, data?: any): Promise<any> {
     return await request.post(`${Server}Wechat/${What}/${WechatID}/${UUID}`, data);
 }
-
+/**
+ * 判断是否是微信浏览器
+ */
 export function isWeixinBrowser() {
-    var agent: any = window.navigator.userAgent.toLowerCase();
-    if (agent.match(/MicroMessenger/i) == "micromessenger") {
-        return true;
-    } else {
-        return false;
-    }
+    return window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
 }
 /**
  * 设置微信ID
@@ -71,7 +68,7 @@ export function set(WID: string, server: string = 'http://api.tansuyun.cn/') {
     Server = server
 }
 export async function user() {
-    if (IsWechatBrower) {
+    if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
     try {
@@ -86,7 +83,7 @@ export async function user() {
     }
 }
 export async function config() {
-    if (IsWechatBrower) {
+    if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
     let config = await post('jsConfig', { URL: window.location.href })
@@ -95,7 +92,7 @@ export async function config() {
     }
 }
 export function location(s: Function, e: Function) {
-    if (IsWechatBrower) {
+    if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
     wx.getLocation({
@@ -108,7 +105,7 @@ export function location(s: Function, e: Function) {
     })
 }
 export function scan(s: Function, NeedResult: boolean = false, e?: Function) {
-    if (IsWechatBrower) {
+    if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
     wx.scanQRCode({
@@ -125,14 +122,14 @@ export function scan(s: Function, NeedResult: boolean = false, e?: Function) {
  * 关闭窗口
  */
 export function close() {
-    if (IsWechatBrower) {
+    if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
     wx.closeWindow()
     if (wx && wx.closeWindow) { wx.closeWindow() }
 }
 export function hideMenuItems() {
-    if (IsWechatBrower) {
+    if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
     wx.hideMenuItems()
