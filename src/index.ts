@@ -3,7 +3,7 @@ declare const window: any;
 declare const wx: any;
 export var WechatID: string = '';
 export var Server: string = 'http://api.tansuyun.cn/';
-export var UUID = uuid();
+export var UUID = '';
 export const IsWechatBrower = isWeixinBrowser();
 const request = axios.create({
     withCredentials: true,
@@ -63,9 +63,14 @@ export function isWeixinBrowser() {
  * 设置微信ID
  * @param WID 
  */
-export function set(WID: string, server: string = 'http://api.tansuyun.cn/') {
-    WechatID = WID;
-    Server = server
+export function config(config: {
+    WechatID: string,
+    Server?: string,
+    UUID?: string,
+}) {
+    WechatID = config.WechatID;
+    Server = config.Server || 'http://api.tansuyun.cn/'
+    UUID = config.UUID || uuid();
 }
 export async function user() {
     if (!IsWechatBrower) {
@@ -82,7 +87,7 @@ export async function user() {
         window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}`
     }
 }
-export async function config() {
+export async function jsConfig() {
     if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
