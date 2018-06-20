@@ -78,7 +78,7 @@ export async function user() {
     }
     try {
         let UserInfo: any = await post('getLogined', {})
-        if (UserInfo.openid) {
+        if (UserInfo.d.openid) {
             return UserInfo;
         } else {
             window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}`
