@@ -59,7 +59,7 @@ async function post(What: string, data?: any): Promise<any> {
  * 判断是否是微信浏览器
  */
 export function isWeixinBrowser() {
-    return window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
+    return window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i) != null;
 }
 /**
  * 设置微信ID
