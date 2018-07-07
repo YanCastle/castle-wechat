@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { get_uuid } from '../../castle-utils/src/index';
+import { get_uuid } from 'castle-utils';
 declare const window: any;
 declare const wx: any;
 export var WechatID: string = '';
