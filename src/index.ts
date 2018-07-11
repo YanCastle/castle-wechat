@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { get_uuid } from 'castle-utils';
-import WxUploader from './WxUploader.vue'
+// import WxUploader from './WxUploader.vue'
 declare const window: any;
 declare const wx: any;
 export var WechatID: string = '';
@@ -208,7 +208,7 @@ export function previewImage(current: string, urls: string[]) {
 }
 
 export function install(Vue: any, options?: { WechatID: string, Server?: string }) {
-    Vue.component('WxUploader', WxUploader)
+    // Vue.component('WxUploader', WxUploader)
     if (options.WechatID) {
         config(options)
     }
