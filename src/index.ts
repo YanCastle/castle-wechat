@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { get_uuid } from 'castle-utils';
+import WxUploader from './WxUploader.vue'
 declare const window: any;
 declare const wx: any;
 export var WechatID: string = '';
@@ -179,6 +180,7 @@ export function chooseImage(success: (src: string[]) => void, count: number = 9)
         }
     })
 }
+
 /**
  * 上传图片
  * @param localIds  需要上传的图片的本地ID，由chooseImage接口获得
@@ -203,4 +205,14 @@ export function previewImage(current: string, urls: string[]) {
         current: current,
         urls: urls
     })
+}
+
+export function install(Vue: any, options?: { WechatID: string, Server?: string }) {
+    Vue.component('WxUploader', WxUploader)
+    if (options.WechatID) {
+        config(options)
+    }
+}
+export default {
+    install
 }

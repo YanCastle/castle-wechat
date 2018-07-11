@@ -9,7 +9,7 @@ npm i -D castle-wechat
 ```
 2. 导入
 ```typescript
-import {
+import Wechat,{
   IsWechatBrower,
   user,
   config,
@@ -17,7 +17,7 @@ import {
   location
 } from "castle-wechat";
 ```
-3. 在App.vue中的created中完成配置
+3. 在App.vue中的created中完成配置，或在main.ts中
 ```typescript
 if (IsWechatBrower) {
     await config({
