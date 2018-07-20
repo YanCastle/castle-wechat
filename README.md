@@ -24,6 +24,7 @@ if (IsWechatBrower) {
     WechatID: "gh_339982221ea7",
     Server: "http://wx.dev.tansuyun.cn/",
     UUID: '',//来自本地缓存的用户的UUID信息
+    BaiduMapAK:'',//百度Map的AK
     });
     let UserInfo = await user();
     //获得用户信息后请保存到Vuex中或其它地方
