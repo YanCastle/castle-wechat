@@ -1,6 +1,7 @@
 export declare var WechatID: string;
 export declare var Server: string;
 export declare var UUID: string;
+export declare var BaiduMapAK: string;
 export declare const IsWechatBrower: boolean;
 export declare var jsConfiged: boolean;
 export declare var UserInfo: any;
@@ -47,6 +48,7 @@ export declare function config(config: {
     WechatID: string;
     Server?: string;
     UUID?: string;
+    BaiduMapAK?: string;
 }): void;
 export declare function user(): Promise<any>;
 export declare function jsConfig(): Promise<void>;

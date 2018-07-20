@@ -5,6 +5,7 @@ const castle_utils_1 = require("castle-utils");
 exports.WechatID = '';
 exports.Server = 'http://api.tansuyun.cn/';
 exports.UUID = '';
+exports.BaiduMapAK = '';
 exports.IsWechatBrower = isWeixinBrowser();
 exports.jsConfiged = false;
 exports.UserInfo = false;
@@ -55,6 +56,9 @@ exports.defaultApis = Object.keys(exports.Api);
 async function post(What, data) {
     return await request.post(`${exports.Server}Wechat/${What}/${exports.WechatID}/${exports.UUID}`, data);
 }
+async function get(url) {
+    return await request.get(url);
+}
 function isWeixinBrowser() {
     return window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i) != null;
 }
@@ -63,6 +67,7 @@ function config(config) {
     exports.WechatID = config.WechatID;
     exports.Server = config.Server || 'http://api.tansuyun.cn/';
     exports.UUID = config.UUID || castle_utils_1.get_uuid();
+    exports.BaiduMapAK = config.BaiduMapAK;
 }
 exports.config = config;
 async function user() {
@@ -107,7 +112,11 @@ function location(s, e) {
         type: 'wgs84',
         success: (res) => {
             if (s instanceof Function) {
-                s(res);
+                get("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + exports.BaiduMapAK).then((data) => {
+                    res.longitude = data.result[0].x;
+                    res.latitude = data.result[0].y;
+                    s(res);
+                });
             }
         }
     });
