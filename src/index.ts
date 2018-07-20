@@ -6,6 +6,7 @@ declare const wx: any;
 export var WechatID: string = '';
 export var Server: string = 'http://api.tansuyun.cn/';
 export var UUID = '';
+export var BaiduMapAK = '';
 export const IsWechatBrower = isWeixinBrowser();
 export var jsConfiged = false;
 export var UserInfo: any = false;
@@ -57,6 +58,9 @@ export const defaultApis = Object.keys(Api)
 async function post(What: string, data?: any): Promise<any> {
     return await request.post(`${Server}Wechat/${What}/${WechatID}/${UUID}`, data);
 }
+async function get(url) {
+    return await request.get(url)
+}
 /**
  * 判断是否是微信浏览器
  */
@@ -71,10 +75,12 @@ export function config(config: {
     WechatID: string,
     Server?: string,
     UUID?: string,
+    BaiduMapAK?: string
 }) {
     WechatID = config.WechatID;
     Server = config.Server || 'http://api.tansuyun.cn/'
     UUID = config.UUID || get_uuid();
+    BaiduMapAK = config.BaiduMapAK
 }
 export async function user() {
     if (!IsWechatBrower) {
@@ -119,7 +125,11 @@ export function location(s: (res: { latitude: number, longitude: number, speed: 
         type: 'wgs84',
         success: (res: any) => {
             if (s instanceof Function) {
-                s(res)
+                get("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + BaiduMapAK).then((data: any) => {
+                    res.longitude = data.result[0].x
+                    res.latitude = data.result[0].y
+                    s(res)
+                })
             }
         }
     })
