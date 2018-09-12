@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { get_uuid } from 'castle-utils';
+import * as jsonp from 'jsonp'
 // import WxUploader from './WxUploader.vue'
 declare const window: any;
 declare const wx: any;
@@ -125,10 +126,14 @@ export function location(s: (res: { latitude: number, longitude: number, speed: 
         type: 'wgs84',
         success: (res: any) => {
             if (s instanceof Function) {
-                get("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + BaiduMapAK).then((data: any) => {
-                    res.longitude = data.result[0].x
-                    res.latitude = data.result[0].y
-                    s(res)
+                jsonp("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + BaiduMapAK, null, (err, data) => {
+                    if (err) {
+                        res.longitude = data.result[0].x
+                        res.latitude = data.result[0].y
+                        s(res)
+                    } else {
+                        e(err)
+                    }
                 })
             }
         }

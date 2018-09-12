@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
 const castle_utils_1 = require("castle-utils");
+const jsonp = require("jsonp");
 exports.WechatID = '';
 exports.Server = 'http://api.tansuyun.cn/';
 exports.UUID = '';
@@ -112,10 +113,15 @@ function location(s, e) {
         type: 'wgs84',
         success: (res) => {
             if (s instanceof Function) {
-                get("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + exports.BaiduMapAK).then((data) => {
-                    res.longitude = data.result[0].x;
-                    res.latitude = data.result[0].y;
-                    s(res);
+                jsonp("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + exports.BaiduMapAK, null, (err, data) => {
+                    if (err) {
+                        res.longitude = data.result[0].x;
+                        res.latitude = data.result[0].y;
+                        s(res);
+                    }
+                    else {
+                        e(err);
+                    }
                 });
             }
         }

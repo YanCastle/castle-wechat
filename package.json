@@ -1,6 +1,6 @@
 {
   "name": "castle-wechat",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -16,7 +16,6 @@
     "type": "git",
     "url": "git+https://github.com/YanCastle/castle-wechat.git"
   },
-  "types": "dist/index.d.ts",
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -25,7 +24,8 @@
   "homepage": "https://github.com/YanCastle/castle-wechat#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "castle-utils": "^1.0.1"
+    "castle-utils": "^1.0.1",
+    "jsonp": "^0.2.1"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0"
