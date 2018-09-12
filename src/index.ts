@@ -127,12 +127,13 @@ export function location(s: (res: { latitude: number, longitude: number, speed: 
         success: (res: any) => {
             if (s instanceof Function) {
                 jsonp("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + BaiduMapAK, null, (err, data) => {
-                    if (err) {
+                    if (!err) {
                         res.longitude = data.result[0].x
                         res.latitude = data.result[0].y
                         s(res)
                     } else {
-                        e(err)
+                        if (e instanceof Function)
+                            e(err)
                     }
                 })
             }
