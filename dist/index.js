@@ -81,11 +81,11 @@ async function user() {
             return UserInfo;
         }
         else {
-            window.location.href = `${exports.Server}Wechat/user/${exports.WechatID}/${exports.UUID}`;
+            window.location.href = `${exports.Server}Wechat/user/${exports.WechatID}/${exports.UUID}?r=${encodeURIComponent(window.location.href)}`;
         }
     }
     catch (error) {
-        window.location.href = `${exports.Server}Wechat/user/${exports.WechatID}/${exports.UUID}`;
+        window.location.href = `${exports.Server}Wechat/user/${exports.WechatID}/${exports.UUID}?r=${encodeURIComponent(window.location.href)}`;
     }
 }
 exports.user = user;
