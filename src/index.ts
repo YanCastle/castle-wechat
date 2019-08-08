@@ -92,10 +92,10 @@ export async function user() {
         if (UserInfo.d.openid) {
             return UserInfo;
         } else {
-            window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}`
+            window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}?r=${encodeURIComponent(window.location.href)}`
         }
     } catch (error) {
-        window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}`
+        window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}?r=${encodeURIComponent(window.location.href)}`
     }
 }
 export async function jsConfig() {
