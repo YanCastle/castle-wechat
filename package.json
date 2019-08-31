@@ -1,6 +1,6 @@
 {
-  "name": "castle-wechat",
-  "version": "1.0.14",
+  "name": "@ctsy/wechat",
+  "version": "1.0.15",
   "description": "",
   "main": "dist/index.js",
   "scripts": {

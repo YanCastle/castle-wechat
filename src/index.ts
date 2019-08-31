@@ -79,10 +79,13 @@ export function config(config: {
     BaiduMapAK?: string
 }) {
     WechatID = config.WechatID;
-    Server = config.Server || 'http://api.tansuyun.cn/'
+    Server = config.Server || 'https://api.tansuyun.cn/'
     UUID = config.UUID || get_uuid();
     BaiduMapAK = config.BaiduMapAK
 }
+/**
+ * 获取用户认证信息
+ */
 export async function user() {
     if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
@@ -98,6 +101,9 @@ export async function user() {
         window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}?r=${encodeURIComponent(window.location.href)}`
     }
 }
+/**
+ * jsConfig
+ */
 export async function jsConfig() {
     if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
@@ -114,6 +120,7 @@ if (IsWechatBrower) {
     })
 }
 /**
+ * 定位
  * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115
  * @param s 
  * @param e 
@@ -125,18 +132,25 @@ export function location(s: (res: { latitude: number, longitude: number, speed: 
     wx.getLocation({
         type: 'wgs84',
         success: (res: any) => {
-            if (s instanceof Function) {
-                jsonp("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + BaiduMapAK, null, (err, data) => {
-                    if (!err) {
-                        res.longitude = data.result[0].x
-                        res.latitude = data.result[0].y
-                        s(res)
-                    } else {
-                        if (e instanceof Function)
-                            e(err)
-                    }
-                })
+            if (res.errMsg.indexOf("ok")) {
+                if (s instanceof Function) {
+                    s(res);
+                }
+            } else if (e instanceof Function) {
+                e(res);
             }
+            // if (s instanceof Function) {
+            //     jsonp("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + BaiduMapAK, null, (err, data) => {
+            //         if (!err) {
+            //             res.longitude = data.result[0].x
+            //             res.latitude = data.result[0].y
+            //             s(res)
+            //         } else {
+            //             if (e instanceof Function)
+            //                 e(err)
+            //         }
+            //     })
+            // }
         }
     })
 }
