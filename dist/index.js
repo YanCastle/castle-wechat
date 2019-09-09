@@ -104,36 +104,46 @@ if (exports.IsWechatBrower) {
         jsConfig();
     });
 }
-function location(s, e) {
+function location() {
     if (!exports.IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
-    wx.getLocation({
-        type: 'wgs84',
-        success: (res) => {
-            if (res.errMsg.indexOf("ok")) {
-                if (s instanceof Function) {
-                    s(res);
+    let finish = false;
+    return new Promise((s, j) => {
+        setTimeout(() => {
+            if (!finish) {
+                finish = true;
+                j('定位超时');
+            }
+        }, 1500);
+        wx.getLocation({
+            type: 'wgs84',
+            success: (res) => {
+                if (!finish) {
+                    finish = true;
+                    if (res.errMsg.indexOf("ok")) {
+                        s(res);
+                    }
+                    else {
+                        j(res);
+                    }
                 }
             }
-            else if (e instanceof Function) {
-                e(res);
-            }
-        }
+        });
     });
 }
 exports.location = location;
-function scan(s, NeedResult = false, e) {
+function scan(NeedResult = false) {
     if (!exports.IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
-    wx.scanQRCode({
-        needResult: NeedResult ? 1 : 0,
-        success: (d) => {
-            if (s instanceof Function) {
+    return new Promise((s, j) => {
+        wx.scanQRCode({
+            needResult: NeedResult ? 1 : 0,
+            success: (d) => {
                 s(d.resultStr);
             }
-        }
+        });
     });
 }
 exports.scan = scan;
@@ -154,33 +164,38 @@ function hideMenuItems() {
     wx.hideMenuItems();
 }
 exports.hideMenuItems = hideMenuItems;
-function networkType(s) {
-    if (wx && wx.getNetworkType) {
-        wx.getNetworkType({
-            success: (d) => { if (s instanceof Function)
-                s(d); }
-        });
-    }
-}
-exports.networkType = networkType;
-function chooseImage(success, count = 9) {
-    wx.chooseImage({
-        count: count || 9,
-        sizeType: ['original', 'compressed'],
-        sourceType: ['album', 'camera'],
-        success: (res) => {
-            success(res.localIds);
+function networkType() {
+    return new Promise((s, j) => {
+        if (wx && wx.getNetworkType) {
+            wx.getNetworkType({
+                success: (d) => { s(d); }
+            });
         }
     });
 }
+exports.networkType = networkType;
+function chooseImage(count = 9) {
+    return new Promise((s, j) => {
+        wx.chooseImage({
+            count: count || 9,
+            sizeType: ['original', 'compressed'],
+            sourceType: ['album', 'camera'],
+            success: (res) => {
+                s(res.localIds);
+            }
+        });
+    });
+}
 exports.chooseImage = chooseImage;
-function uploadImage(localIds, success) {
-    wx.uploadImage({
-        localId: localIds,
-        isShowProgressTips: 1,
-        success: (res) => {
-            success(res.serverId);
-        }
+function uploadImage(localIds) {
+    return new Promise((s, j) => {
+        wx.uploadImage({
+            localId: localIds,
+            isShowProgressTips: 1,
+            success: (res) => {
+                s(res.serverId);
+            }
+        });
     });
 }
 exports.uploadImage = uploadImage;

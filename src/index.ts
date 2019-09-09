@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { get_uuid } from 'castle-utils';
-import * as jsonp from 'jsonp'
-// import WxUploader from './WxUploader.vue'
 declare const window: any;
 declare const wx: any;
+declare const setTimeout: any;
 export var WechatID: string = '';
 export var Server: string = 'http://api.tansuyun.cn/';
 export var UUID = '';
@@ -125,46 +124,44 @@ if (IsWechatBrower) {
  * @param s 
  * @param e 
  */
-export function location(s: (res: { latitude: number, longitude: number, speed: number, accuracy: number }) => void, e?: Function) {
+export function location(): Promise<{ latitude: number, longitude: number, speed: number, accuracy: number }> {
     if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
-    wx.getLocation({
-        type: 'wgs84',
-        success: (res: any) => {
-            if (res.errMsg.indexOf("ok")) {
-                if (s instanceof Function) {
-                    s(res);
-                }
-            } else if (e instanceof Function) {
-                e(res);
+    let finish = false;
+    return new Promise((s, j) => {
+        setTimeout(() => {
+            if (!finish) {
+                finish = true;
+                j('定位超时')
             }
-            // if (s instanceof Function) {
-            //     jsonp("http://api.map.baidu.com/geoconv/v1/?coords=" + res.longitude + "," + res.latitude + "&from=1&to=5&ak=" + BaiduMapAK, null, (err, data) => {
-            //         if (!err) {
-            //             res.longitude = data.result[0].x
-            //             res.latitude = data.result[0].y
-            //             s(res)
-            //         } else {
-            //             if (e instanceof Function)
-            //                 e(err)
-            //         }
-            //     })
-            // }
-        }
+        }, 1500)
+        wx.getLocation({
+            type: 'wgs84',
+            success: (res: any) => {
+                if (!finish) {
+                    finish = true;
+                    if (res.errMsg.indexOf("ok")) {
+                        s(res);
+                    } else {
+                        j(res);
+                    }
+                }
+            }
+        })
     })
 }
-export function scan(s: (result: string) => void, NeedResult: boolean = false, e?: Function) {
+export function scan(NeedResult: boolean = false): Promise<string> {
     if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
-    wx.scanQRCode({
-        needResult: NeedResult ? 1 : 0,
-        success: (d: any) => {
-            if (s instanceof Function) {
+    return new Promise((s, j) => {
+        wx.scanQRCode({
+            needResult: NeedResult ? 1 : 0,
+            success: (d: any) => {
                 s(d.resultStr)
             }
-        }
+        })
     })
 }
 
@@ -188,26 +185,30 @@ export function hideMenuItems() {
  * 获取网络接口类型
  * @param {Function} s
  */
-export function networkType(s: Function) {
-    if (wx && wx.getNetworkType) {
-        wx.getNetworkType({
-            success: (d: any) => { if (s instanceof Function) s(d) }
-        })
-    }
+export function networkType() {
+    return new Promise((s, j) => {
+        if (wx && wx.getNetworkType) {
+            wx.getNetworkType({
+                success: (d: any) => { s(d) }
+            })
+        }
+    })
 }
 /**
  * 选择图片，弹出微信图片选择框
  * @param success 
  * @param count 
  */
-export function chooseImage(success: (src: string[]) => void, count: number = 9) {
-    wx.chooseImage({
-        count: count || 9, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-        success: (res: any) => {
-            success(res.localIds)
-        }
+export function chooseImage(count: number = 9): Promise<string[]> {
+    return new Promise((s, j) => {
+        wx.chooseImage({
+            count: count || 9, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: (res: any) => {
+                s(res.localIds)
+            }
+        })
     })
 }
 
@@ -216,14 +217,17 @@ export function chooseImage(success: (src: string[]) => void, count: number = 9)
  * @param localIds  需要上传的图片的本地ID，由chooseImage接口获得
  * @param success 
  */
-export function uploadImage(localIds: string[], success: (src: string[]) => void) {
-    wx.uploadImage({
-        localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
-        isShowProgressTips: 1, // 默认为1，显示进度提示
-        success: (res: any) => {
-            success(res.serverId)
-        }
-    });
+export function uploadImage(localIds: string[]): Promise<string[]> {
+    return new Promise((s, j) => {
+        wx.uploadImage({
+            localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: (res: any) => {
+                s(res.serverId)
+                // success(res.serverId)
+            }
+        });
+    })
 }
 /**
  * 预览图片

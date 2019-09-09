@@ -52,18 +52,18 @@ export declare function config(config: {
 }): void;
 export declare function user(): Promise<any>;
 export declare function jsConfig(): Promise<void>;
-export declare function location(s: (res: {
+export declare function location(): Promise<{
     latitude: number;
     longitude: number;
     speed: number;
     accuracy: number;
-}) => void, e?: Function): void;
-export declare function scan(s: (result: string) => void, NeedResult?: boolean, e?: Function): void;
+}>;
+export declare function scan(NeedResult?: boolean): Promise<string>;
 export declare function close(): void;
 export declare function hideMenuItems(): void;
-export declare function networkType(s: Function): void;
-export declare function chooseImage(success: (src: string[]) => void, count?: number): void;
-export declare function uploadImage(localIds: string[], success: (src: string[]) => void): void;
+export declare function networkType(): Promise<unknown>;
+export declare function chooseImage(count?: number): Promise<string[]>;
+export declare function uploadImage(localIds: string[]): Promise<string[]>;
 export declare function previewImage(current: string, urls: string[]): void;
 export declare function install(Vue: any, options?: {
     WechatID: string;
