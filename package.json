@@ -1,11 +1,12 @@
 {
   "name": "@ctsy/wechat",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "rm -rf dist && tsc"
+    "build": "webpack --mode production --config build/config.js src/index.ts",
+    "prepublish": "rm -rf dist && tsc && npm run build"
   },
   "files": [
     "dist/index.js",
@@ -29,6 +30,10 @@
     "jsonp": "~0.2.1"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0"
+    "@types/axios": "^0.14.0",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
   }
 }
