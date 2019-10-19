@@ -51,7 +51,7 @@ export declare function config(config: {
     BaiduMapAK?: string;
 }): void;
 export declare function user(): Promise<any>;
-export declare function jsConfig(): Promise<void>;
+export declare function jsConfig(): Promise<boolean>;
 export declare function location(): Promise<{
     latitude: number;
     longitude: number;

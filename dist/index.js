@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
 const castle_utils_1 = require("castle-utils");
 exports.WechatID = '';
-exports.Server = 'http://api.tansuyun.cn/';
+exports.Server = 'https://v1.api.tansuyun.cn/';
 exports.UUID = '';
 exports.BaiduMapAK = '';
 exports.IsWechatBrower = isWeixinBrowser();
@@ -53,8 +53,8 @@ exports.Api = {
     openCard: 'openCard'
 };
 exports.defaultApis = Object.keys(exports.Api);
-async function post(What, data) {
-    return await request.post(`${exports.Server}Wechat/${What}/${exports.WechatID}/${exports.UUID}`, data);
+async function post(Where, What, data) {
+    return await request.post([exports.Server, '_wechat', Where, What, exports.WechatID, exports.UUID].join('/').replace('//_wechat', '/_wechat'), data);
 }
 async function get(url) {
     return await request.get(url);
@@ -65,7 +65,8 @@ function isWeixinBrowser() {
 exports.isWeixinBrowser = isWeixinBrowser;
 function config(config) {
     exports.WechatID = config.WechatID;
-    exports.Server = config.Server || 'https://api.tansuyun.cn/';
+    if (config.Server)
+        exports.Server = config.Server;
     exports.UUID = config.UUID || castle_utils_1.get_uuid();
     exports.BaiduMapAK = config.BaiduMapAK;
 }
@@ -74,17 +75,18 @@ async function user() {
     if (!exports.IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
+    let url = [exports.Server, '_wechat', 'Auth', 'user', exports.WechatID, exports.UUID].join('/').replace('//_wechat', '/_wechat') + `?r=${encodeURIComponent(window.location.href)}`;
     try {
-        let UserInfo = await post('getLogined', {});
+        let UserInfo = await post('Auth', 'getLogined', {});
         if (UserInfo.d.openid) {
             return UserInfo;
         }
         else {
-            window.location.href = `${exports.Server}Wechat/user/${exports.WechatID}/${exports.UUID}?r=${encodeURIComponent(window.location.href)}`;
+            window.location.href = url;
         }
     }
     catch (error) {
-        window.location.href = `${exports.Server}Wechat/user/${exports.WechatID}/${exports.UUID}?r=${encodeURIComponent(window.location.href)}`;
+        window.location.href = url;
     }
 }
 exports.user = user;
@@ -92,10 +94,13 @@ async function jsConfig() {
     if (!exports.IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
-    let config = await post('jsConfig', { URL: window.location.href });
+    if (exports.jsConfiged) {
+        return true;
+    }
+    let config = await post('Js', 'jsConfig', { URL: window.location.href });
     if (config.d) {
         wx.config(config.d);
-        exports.jsConfiged = true;
+        return exports.jsConfiged = true;
     }
 }
 exports.jsConfig = jsConfig;

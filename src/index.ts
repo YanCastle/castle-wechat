@@ -4,7 +4,7 @@ declare const window: any;
 declare const wx: any;
 declare const setTimeout: any;
 export var WechatID: string = '';
-export var Server: string = 'http://api.tansuyun.cn/';
+export var Server: string = 'https://v1.api.tansuyun.cn/';
 export var UUID = '';
 export var BaiduMapAK = '';
 export const IsWechatBrower = isWeixinBrowser();
@@ -55,8 +55,8 @@ export const Api = {
 }
 
 export const defaultApis = Object.keys(Api)
-async function post(What: string, data?: any): Promise<any> {
-    return await request.post(`${Server}Wechat/${What}/${WechatID}/${UUID}`, data);
+async function post(Where: string, What: string, data?: any): Promise<any> {
+    return await request.post([Server, '_wechat', Where, What, WechatID, UUID].join('/').replace('//_wechat', '/_wechat'), data);
 }
 async function get(url) {
     return await request.get(url)
@@ -78,7 +78,8 @@ export function config(config: {
     BaiduMapAK?: string
 }) {
     WechatID = config.WechatID;
-    Server = config.Server || 'https://api.tansuyun.cn/'
+    if (config.Server)
+        Server = config.Server;
     UUID = config.UUID || get_uuid();
     BaiduMapAK = config.BaiduMapAK
 }
@@ -89,15 +90,16 @@ export async function user() {
     if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
+    let url = [Server, '_wechat', 'Auth', 'user', WechatID, UUID].join('/').replace('//_wechat', '/_wechat') + `?r=${encodeURIComponent(window.location.href)}`
     try {
-        let UserInfo: any = await post('getLogined', {})
+        let UserInfo: any = await post('Auth', 'getLogined', {})
         if (UserInfo.d.openid) {
             return UserInfo;
         } else {
-            window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}?r=${encodeURIComponent(window.location.href)}`
+            window.location.href = url;
         }
     } catch (error) {
-        window.location.href = `${Server}Wechat/user/${WechatID}/${UUID}?r=${encodeURIComponent(window.location.href)}`
+        window.location.href = url;
     }
 }
 /**
@@ -107,10 +109,11 @@ export async function jsConfig() {
     if (!IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
     }
-    let config = await post('jsConfig', { URL: window.location.href })
+    if (jsConfiged) { return true; }
+    let config = await post('Js', 'jsConfig', { URL: window.location.href })
     if (config.d) {
         wx.config(config.d)
-        jsConfiged = true;
+        return jsConfiged = true;
     }
 }
 if (IsWechatBrower) {
