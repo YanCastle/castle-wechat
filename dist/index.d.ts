@@ -59,6 +59,7 @@ export declare function location(): Promise<{
     accuracy: number;
 }>;
 export declare function scan(NeedResult?: boolean): Promise<string>;
+export declare function share(title: string, desc: string, link: string, imgUrl: string): Promise<unknown>;
 export declare function close(): void;
 export declare function hideMenuItems(): void;
 export declare function networkType(): Promise<unknown>;

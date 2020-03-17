@@ -167,7 +167,36 @@ export function scan(NeedResult: boolean = false): Promise<string> {
         })
     })
 }
-
+/**
+ * 分享接口
+ * @param title 分享标题
+ * @param desc 分享描述
+ * @param link 跳转链接，必须是授权的域名
+ * @param imgUrl 图标
+ */
+export function share(title: string, desc: string, link: string, imgUrl: string) {
+    return new Promise((s, j) => {
+        let i = 0;
+        function success() {
+            if (++i > 1) {
+                s();
+            }
+        }
+        wx.updateAppMessageShareData({
+            title, // 分享标题
+            desc, // 分享描述
+            link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl, // 分享图标
+            success
+        })
+        wx.updateTimelineShareData({
+            title, // 分享标题
+            link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl, // 分享图标
+            success
+        })
+    })
+}
 /**
  * 关闭窗口
  */
@@ -246,10 +275,16 @@ export function previewImage(current: string, urls: string[]) {
 
 export function install(Vue: any, options?: { WechatID: string, Server?: string }) {
     // Vue.component('WxUploader', WxUploader)
+    Vue.$wx = wx;
     if (options.WechatID) {
         config(options)
     }
 }
 export default {
     install
+}
+if (window) {
+    window.ctsywechat = {
+        install,
+    }
 }

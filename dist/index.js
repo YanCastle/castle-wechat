@@ -152,6 +152,30 @@ function scan(NeedResult = false) {
     });
 }
 exports.scan = scan;
+function share(title, desc, link, imgUrl) {
+    return new Promise((s, j) => {
+        let i = 0;
+        function success() {
+            if (++i > 1) {
+                s();
+            }
+        }
+        wx.updateAppMessageShareData({
+            title,
+            desc,
+            link,
+            imgUrl,
+            success
+        });
+        wx.updateTimelineShareData({
+            title,
+            link,
+            imgUrl,
+            success
+        });
+    });
+}
+exports.share = share;
 function close() {
     if (!exports.IsWechatBrower) {
         throw new Error('NOT_WECHAT_BROWER');
@@ -212,6 +236,7 @@ function previewImage(current, urls) {
 }
 exports.previewImage = previewImage;
 function install(Vue, options) {
+    Vue.$wx = wx;
     if (options.WechatID) {
         config(options);
     }
@@ -220,4 +245,9 @@ exports.install = install;
 exports.default = {
     install
 };
+if (window) {
+    window.ctsywechat = {
+        install,
+    };
+}
 //# sourceMappingURL=index.js.map
