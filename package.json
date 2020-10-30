@@ -1,6 +1,6 @@
 {
   "name": "@ctsy/wechat",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -28,7 +28,8 @@
   "dependencies": {
     "@ctsy/common": "*",
     "axios": "*",
-    "jsonp": "*"
+    "jsonp": "*",
+    "store": "^2.0.12"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
