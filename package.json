@@ -1,6 +1,6 @@
 {
   "name": "@ctsy/wechat",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/YanCastle/castle-wechat#readme",
   "dependencies": {
-    "axios": "~0.19.0",
-    "castle-utils": "~1.0.2",
-    "jsonp": "~0.2.1"
+    "@ctsy/common": "*",
+    "axios": "*",
+    "jsonp": "*"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
