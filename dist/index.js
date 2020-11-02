@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
-const castle_utils_1 = require("castle-utils");
+const common_1 = require("@ctsy/common");
+const store = require("store");
 exports.WechatID = '';
 exports.Server = 'https://v1.api.tansuyun.cn/';
 exports.UUID = '';
@@ -67,7 +68,7 @@ function config(config) {
     exports.WechatID = config.WechatID;
     if (config.Server)
         exports.Server = config.Server;
-    exports.UUID = config.UUID || castle_utils_1.get_uuid();
+    exports.UUID = config.UUID || store.get('token') || common_1.uuid();
     exports.BaiduMapAK = config.BaiduMapAK;
 }
 exports.config = config;
@@ -217,15 +218,17 @@ function chooseImage(count = 9) {
 }
 exports.chooseImage = chooseImage;
 function uploadImage(localIds) {
-    return new Promise((s, j) => {
-        wx.uploadImage({
-            localId: localIds,
-            isShowProgressTips: 1,
-            success: (res) => {
-                s(res.serverId);
-            }
+    return Promise.all(localIds.map((o) => {
+        return new Promise((s, j) => {
+            wx.uploadImage({
+                localId: o,
+                isShowProgressTips: 1,
+                success: (res) => {
+                    s(res.serverId);
+                }
+            });
         });
-    });
+    }));
 }
 exports.uploadImage = uploadImage;
 function previewImage(current, urls) {

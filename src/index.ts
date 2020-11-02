@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { get_uuid } from 'castle-utils';
+import { uuid } from '@ctsy/common';
+import * as store from 'store'
 declare const window: any;
 declare const wx: any;
 declare const setTimeout: any;
@@ -80,7 +81,7 @@ export function config(config: {
     WechatID = config.WechatID;
     if (config.Server)
         Server = config.Server;
-    UUID = config.UUID || get_uuid();
+    UUID = config.UUID || store.get('token') || uuid();
     BaiduMapAK = config.BaiduMapAK
 }
 /**
@@ -250,17 +251,20 @@ export function chooseImage(count: number = 9): Promise<string[]> {
  * @param success 
  */
 export function uploadImage(localIds: string[]): Promise<string[]> {
-    return new Promise((s, j) => {
-        wx.uploadImage({
-            localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
-            isShowProgressTips: 1, // 默认为1，显示进度提示
-            success: (res: any) => {
-                s(res.serverId)
-                // success(res.serverId)
-            }
-        });
-    })
+    return Promise.all(localIds.map((o) => {
+        return <any>new Promise((s, j) => {
+            wx.uploadImage({
+                localId: o, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: (res: { serverId: string }) => {
+                    s(res.serverId)
+                    // success(res.serverId)
+                }
+            });
+        })
+    }))
 }
+
 /**
  * 预览图片
  * @param current 当前显示图片的http链接
@@ -286,5 +290,6 @@ export default {
 if (window) {
     window.ctsywechat = {
         install,
+        WechatID
     }
 }

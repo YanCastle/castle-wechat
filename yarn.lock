@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@ctsy/common@*":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@ctsy/common/-/common-1.0.2.tgz#c9e49e6f9211e7d184d28482e279730e4d3738ff"
+  integrity sha512-kRyfrRuA/+iQx7GPLBnmOhvym0Mg5Erscr7pLDKROimsDSzcG3PJTSRVG1atui4TlKS+uXsllsChY50yySSkmQ==
+  dependencies:
+    lodash "^4.17.15"
+
 "@types/axios@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
@@ -290,7 +297,7 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-axios@*, axios@~0.19.0:
+axios@*:
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
   integrity sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==
@@ -500,11 +507,6 @@ camelcase@^5.0.0:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.3.1.tgz#e3c9b31569e106811df242f715725a1f4c494320"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
-
-castle-utils@~1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/castle-utils/-/castle-utils-1.0.2.tgz#86b26ea3bf809c6797c032c0724af7522ed59ccf"
-  integrity sha512-xivht63kaRpGalmorgQw8ZxbiVUhXqHdw61LAqInsw7qme9WxCgu4Ds2j5sj5vrKavKEoaJikqnmJpmqQ/cMuA==
 
 chalk@2.4.2, chalk@^2.3.0:
   version "2.4.2"
@@ -1548,7 +1550,7 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
-jsonp@~0.2.1:
+jsonp@*:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/jsonp/-/jsonp-0.2.1.tgz#a65b4fa0f10bda719a05441ea7b94c55f3e15bae"
   integrity sha1-pltPoPEL2nGaBUQep7lMVfPhW64=
@@ -1607,6 +1609,11 @@ locate-path@^3.0.0:
   dependencies:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
+
+lodash@^4.17.15:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -2552,6 +2559,11 @@ static-extend@^0.1.1:
   dependencies:
     define-property "^0.2.5"
     object-copy "^0.1.0"
+
+store@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/store/-/store-2.0.12.tgz#8c534e2a0b831f72b75fc5f1119857c44ef5d593"
+  integrity sha1-jFNOKguDH3K3X8XxEZhXxE711ZM=
 
 stream-browserify@^2.0.1:
   version "2.0.2"
